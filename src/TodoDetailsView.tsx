@@ -15,17 +15,25 @@ export default function TodoDetailsView(props:TodoDetailsPropType) {
     const todoId_str = useParams<{todoId:string}>().todoId;
     const todoId = Number(todoId_str);
 
-    function getTodo() : string {
-        let todo = props.todos.find((todo) => todo.id === todoId);
-        if ( todo === undefined ) {
-            return "not found";
-        }
-        return todo.title;
+    let todo = props.todos.find((todo) => todo.id === todoId);
+    let id;
+    let title;
+    let completed;
+    if ( todo === undefined ) {
+        title = "not found";
+    } else {
+        id = todo.id;
+        title = todo.title;
+        completed = todo.completed;
     }
 
     return(
         <div>
-            Title: {getTodo()};
+            Id: {id} 
+            <br/>
+            Title: {title}
+            <br/>
+            Completed: {completed ? "yes" : "no"}
         </div>
     );
 } 
