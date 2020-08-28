@@ -1,4 +1,4 @@
-import React, { useReducer, useRef, useEffect } from "react";
+import React, { useReducer, useEffect } from "react";
 import "./App.css";
 import { Button } from "@material-ui/core";
 import TodoItem from "./TodoItem";
@@ -29,7 +29,6 @@ type ApiTodoListType = {
 
 export default function TodoApp() {
   const [todos, dispatch] = useReducer(todosReducer, []);
-  const maxIdRef = useRef(2);
 
   const fetchTodos = () => {
     fetch("http://eris:8080/tdl/api/private")
@@ -50,10 +49,6 @@ export default function TodoApp() {
 
   useEffect(fetchTodos, []);
 
-  let nextId = () => {
-    return ++maxIdRef.current;
-  };
-
   let toggle = (todo: TodoType) => {
     dispatch({ type: "toggleTodo", payload: todo.id });
   };
@@ -72,6 +67,7 @@ export default function TodoApp() {
           <ul>
             {todos.map((todo) => (
               <TodoItem
+                key={todo.id}
                 id={todo.id}
                 title={todo.title}
                 completed={todo.completed}
