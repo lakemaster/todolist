@@ -1,8 +1,4 @@
-type TodoType = {
-  id: number;
-  title: string;
-  completed: boolean;
-};
+import { TodoType, ApiTodoListType } from  "./TodoType"
 
 type AddTodoAction = {
   type: "addTodo";
@@ -51,11 +47,13 @@ export default function todosReducer(
         body: JSON.stringify({ list_name: "private", todo: action.payload }),
       })
         .then((response) => response.json())
-        .then((data) => console.log(data));
+        .then((data: ApiTodoListType) => console.log(data));
+
+      // todo: dont known how to use the result because it arrives asynchronously
 
       return [
         ...state,
-        { id: ++maxId, title: action.payload, completed: false },
+        { id: ++maxId, text: action.payload, entry_date: "", done: false },
       ];
     case "removeTodo":
       return state.filter((td) => {
@@ -64,7 +62,7 @@ export default function todosReducer(
     case "toggleTodo":
       return state.map((td) => {
         if (td.id === action.payload) {
-          return { ...td, completed: !td.completed };
+          return { ...td, completed: !td.done };
         }
         return td;
       });

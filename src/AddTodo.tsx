@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 
 type AddTodoProps = {
-    onSubmit: (newTitel:string) => void;
+    onSubmit: (newTodo: string) => void;
 }
 
 export default function AddTodo(props:AddTodoProps) {
-  const [newTitle, setNewTitle] = useState("");
+  const [newTodo, setNewTitle] = useState("");
 
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        props.onSubmit(newTitle);
+        props.onSubmit(newTodo);
         setNewTitle("");
       }}
     >
       <input
-        value={newTitle}
+        value={newTodo}
         onChange={(event) => setNewTitle(event.target.value)}
       />
       <button>Add</button>

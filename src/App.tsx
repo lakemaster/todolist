@@ -1,31 +1,12 @@
 import React, { useReducer, useEffect } from "react";
 import "./App.css";
 import { Button } from "@material-ui/core";
+import { TodoType, ApiTodoType, ApiTodoListType } from "./TodoType";
 import TodoItem from "./TodoItem";
 import AddTodo from "./AddTodo";
 import todosReducer from "./todosReducer";
 import TodoDetailsView from "./TodoDetailsView";
 import { NavLink, Route, Switch } from "react-router-dom";
-
-type TodoType = {
-  id: number;
-  title: string;
-  completed: boolean;
-};
-
-type ApiTodoType = {
-  id: number;
-  listName: string;
-  todo: string;
-  entryDate: string
-  sequence: number
-  done: boolean;
-};
-
-type ApiTodoListType = {
-  todos: ApiTodoType[];
-};
-
 
 export default function TodoApp() {
   const [todos, dispatch] = useReducer(todosReducer, []);
@@ -36,11 +17,12 @@ export default function TodoApp() {
       .then((data: ApiTodoListType) =>
         dispatch({
           type: "setTodos",
-          payload: data.todos.map((apiTodo) => {
+          payload: data.todos.map((todo: ApiTodoType) => {
             return {
-              id: apiTodo.id,
-              title: apiTodo.todo,
-              completed: apiTodo.done,
+              id: todo.id,
+              text: todo.text,
+              entry_date: todo.entry_date,
+              done: todo.done
             };
           }),
         })
@@ -69,8 +51,8 @@ export default function TodoApp() {
               <TodoItem
                 key={todo.id}
                 id={todo.id}
-                title={todo.title}
-                completed={todo.completed}
+                title={todo.text}
+                completed={todo.done}
                 remove={() => remove(todo)}
                 toggle={() => toggle(todo)}
               ></TodoItem>

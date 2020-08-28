@@ -1,11 +1,6 @@
+import { TodoType } from "./TodoType"
 import React from "react";
 import { useParams } from "react-router-dom";
-
-type TodoType = {
-    id: number;
-    title: string;
-    completed: boolean;
-  };
 
 type TodoDetailsPropType = {
     todos: TodoType[]
@@ -23,8 +18,8 @@ export default function TodoDetailsView(props:TodoDetailsPropType) {
         title = "not found";
     } else {
         id = todo.id;
-        title = todo.title;
-        completed = todo.completed;
+        title = todo.text;
+        completed = todo.done;
     }
 
     return(
