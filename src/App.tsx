@@ -14,27 +14,34 @@ type TodoType = {
 };
 
 type ApiTodoType = {
-  userId: number;
   id: number;
-  title: string;
-  completed: boolean;
+  listName: string;
+  todo: string;
+  entryDate: string
+  sequence: number
+  done: boolean;
 };
+
+type ApiTodoListType = {
+  todos: ApiTodoType[];
+};
+
 
 export default function TodoApp() {
   const [todos, dispatch] = useReducer(todosReducer, []);
   const maxIdRef = useRef(2);
 
   const fetchTodos = () => {
-    fetch("https://jsonplaceholder.typicode.com/todos")
+    fetch("http://eris:8080/tdl/api/private")
       .then((responce) => responce.json())
-      .then((data: ApiTodoType[]) =>
+      .then((data: ApiTodoListType) =>
         dispatch({
           type: "setTodos",
-          payload: data.map((apiTodo) => {
+          payload: data.todos.map((apiTodo) => {
             return {
               id: apiTodo.id,
-              title: apiTodo.title,
-              completed: apiTodo.completed,
+              title: apiTodo.todo,
+              completed: apiTodo.done,
             };
           }),
         })
