@@ -28,11 +28,13 @@ type SetTodosAction = {
   payload: TodoType[];
 };
 
+type TodoAction =
+  | AddTodoAction
+  | RemoveTodoAction
+  | ToggleTodoAction
+  | RemoveAllAction
+  | SetTodosAction;
 
-
-
-type TodoAction = AddTodoAction | RemoveTodoAction | ToggleTodoAction | RemoveAllAction | SetTodosAction; 
-let maxId = 0;
 
 export default function todosReducer(
   state: TodoType[],
@@ -40,6 +42,17 @@ export default function todosReducer(
 ): TodoType[] {
   switch (action.type) {
     case "addTodo":
+      let maxId = 0;
+      state.forEach((td: TodoType) => {maxId = td.id > maxId? td.id : maxId});
+  
+        fetch("http://eris:8080/tdl/api", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ list_name: "private", todo: action.payload }),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+
       return [
         ...state,
         { id: ++maxId, title: action.payload, completed: false },
