@@ -1,8 +1,11 @@
-import { TodoType, ApiTodoListType } from  "./TodoType"
+import { TodoType, ApiTodoType, ApiTodoListType } from "./TodoType";
 
 type AddTodoAction = {
   type: "addTodo";
-  payload: string;
+  payload: {
+    text: string;
+    setNewTodos: (data: ApiTodoListType) => void;
+  };
 };
 
 type RemoveTodoAction = {
@@ -31,7 +34,6 @@ type TodoAction =
   | RemoveAllAction
   | SetTodosAction;
 
-
 export default function todosReducer(
   state: TodoType[],
   action: TodoAction
@@ -39,26 +41,34 @@ export default function todosReducer(
   switch (action.type) {
     case "addTodo":
       let maxId = 0;
-      state.forEach((td: TodoType) => {maxId = td.id > maxId? td.id : maxId});
-  
-        fetch("http://eris:8080/tdl/api", {
+      state.forEach((td: TodoType) => {
+        maxId = td.id > maxId ? td.id : maxId;
+      });
+
+      fetch("http://eris:8080/tdl/api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ list_name: "private", todo: action.payload }),
+        body: JSON.stringify({
+          list_name: "private",
+          todo: action.payload.text,
+        }),
       })
         .then((response) => response.json())
-        .then((data: ApiTodoListType) => console.log(data));
-
-      // todo: dont known how to use the result because it arrives asynchronously
+        .then((data: ApiTodoListType) => {
+          console.log(data);
+          action.payload.setNewTodos(data);
+        });
 
       return [
         ...state,
-        { id: ++maxId, text: action.payload, entry_date: "", done: false },
+        { id: ++maxId, text: action.payload.text, entry_date: "", done: false },
       ];
+
     case "removeTodo":
       return state.filter((td) => {
         return td.id !== action.payload;
       });
+
     case "toggleTodo":
       return state.map((td) => {
         if (td.id === action.payload) {
@@ -66,8 +76,10 @@ export default function todosReducer(
         }
         return td;
       });
+
     case "removeAll":
       return [];
+
     case "setTodos":
       return action.payload;
   }

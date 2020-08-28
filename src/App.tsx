@@ -14,19 +14,9 @@ export default function TodoApp() {
   const fetchTodos = () => {
     fetch("http://eris:8080/tdl/api/private")
       .then((responce) => responce.json())
-      .then((data: ApiTodoListType) =>
-        dispatch({
-          type: "setTodos",
-          payload: data.todos.map((todo: ApiTodoType) => {
-            return {
-              id: todo.id,
-              text: todo.text,
-              entry_date: todo.entry_date,
-              done: todo.done
-            };
-          }),
-        })
-      );
+      .then((data: ApiTodoListType) => {
+        return setTodos(data);
+      });
   };
 
   useEffect(fetchTodos, []);
@@ -38,6 +28,20 @@ export default function TodoApp() {
   let remove = (todo: TodoType) => {
     dispatch({ type: "removeTodo", payload: todo.id });
   };
+
+  let setTodos = (apiTodoLost: ApiTodoListType) => {
+    dispatch({
+      type: "setTodos",
+      payload: apiTodoLost.todos.map((todo: ApiTodoType) => {
+        return {
+          id: todo.id,
+          text: todo.text,
+          entry_date: todo.entry_date,
+          done: todo.done
+        };
+      }),
+    });
+  }
 
   return (
     <div className="App">
@@ -67,7 +71,7 @@ export default function TodoApp() {
 
           <AddTodo
             onSubmit={(newTitle) => {
-              dispatch({ type: "addTodo", payload: newTitle });
+              dispatch({ type: "addTodo", payload: {text: newTitle, setNewTodos: setTodos}});
             }}
           ></AddTodo>
 
