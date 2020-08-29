@@ -1,4 +1,4 @@
-import { TodoType, ApiTodoType, ApiTodoListType } from "./TodoType";
+import { TodoType, ApiTodoListType } from "./TodoType";
 
 type AddTodoAction = {
   type: "addTodo";

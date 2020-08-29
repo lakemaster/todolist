@@ -12,13 +12,15 @@ export default function TodoDetailsView(props:TodoDetailsPropType) {
 
     let todo = props.todos.find((todo) => todo.id === todoId);
     let id;
-    let title;
+    let text;
+    let entryDate;
     let completed;
     if ( todo === undefined ) {
-        title = "not found";
+        text = "not found";
     } else {
         id = todo.id;
-        title = todo.text;
+        text = todo.text;
+        entryDate = todo.entry_date;
         completed = todo.done;
     }
 
@@ -26,7 +28,9 @@ export default function TodoDetailsView(props:TodoDetailsPropType) {
         <div>
             Id: {id} 
             <br/>
-            Title: {title}
+            Text: {text}
+            <br/>
+            Entrydate: {entryDate}
             <br/>
             Completed: {completed ? "yes" : "no"}
         </div>
