@@ -26,7 +26,10 @@ export default function TodoApp() {
   };
 
   let remove = (todo: TodoType) => {
-    dispatch({ type: "removeTodo", payload: {id: todo.id, setNewTodos: setTodos}});
+    dispatch({
+      type: "removeTodo",
+      payload: { id: todo.id, setNewTodos: setTodos },
+    });
   };
 
   let setTodos = (apiTodoLost: ApiTodoListType) => {
@@ -37,11 +40,11 @@ export default function TodoApp() {
           id: todo.id,
           text: todo.text,
           entry_date: todo.entry_date,
-          done: todo.done
+          done: todo.done,
         };
       }),
     });
-  }
+  };
 
   return (
     <div className="App">
@@ -49,6 +52,7 @@ export default function TodoApp() {
       <h1>Todo List</h1>
       <Switch>
         <Route path="/about">About Todo</Route>
+
         <Route path="/main">
           <ul>
             {todos.map((todo) => (
@@ -62,20 +66,22 @@ export default function TodoApp() {
               ></TodoItem>
             ))}
           </ul>
+
+          <AddTodo
+            onSubmit={(newTitle) => {
+              dispatch({
+                type: "addTodo",
+                payload: { text: newTitle, setNewTodos: setTodos },
+              });
+            }}
+          ></AddTodo>
+
           <Button
             variant="contained"
             onClick={() => dispatch({ type: "removeAll" })}
           >
             Delete All
           </Button>
-
-          <AddTodo
-            onSubmit={(newTitle) => {
-              dispatch({ type: "addTodo", payload: {text: newTitle, setNewTodos: setTodos}});
-            }}
-          ></AddTodo>
-
-          <br />
         </Route>
         <Route path="/details/:todoId">
           <TodoDetailsView todos={todos}></TodoDetailsView>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button } from "@material-ui/core";
 
 type AddTodoProps = {
     onSubmit: (newTodo: string) => void;
@@ -13,13 +14,12 @@ export default function AddTodo(props:AddTodoProps) {
         event.preventDefault();
         props.onSubmit(newTodo);
         setNewTitle("");
-      }}
-    >
+      }}>
       <input
         value={newTodo}
         onChange={(event) => setNewTitle(event.target.value)}
       />
-      <button>Add</button>
+      <Button variant="contained">Add</Button>
     </form>
   );
 }
