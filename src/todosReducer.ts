@@ -85,7 +85,7 @@ export default function todosReducer(
     case "toggleTodo":
       return state.map((td) => {
         if (td.id === action.payload) {
-          return { ...td, completed: !td.done };
+          return { ...td, done: !td.done };
         }
         return td;
       });
