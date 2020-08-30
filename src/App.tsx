@@ -26,7 +26,7 @@ export default function TodoApp() {
   };
 
   let remove = (todo: TodoType) => {
-    dispatch({ type: "removeTodo", payload: todo.id });
+    dispatch({ type: "removeTodo", payload: {id: todo.id, setNewTodos: setTodos}});
   };
 
   let setTodos = (apiTodoLost: ApiTodoListType) => {

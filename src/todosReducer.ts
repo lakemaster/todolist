@@ -10,7 +10,10 @@ type AddTodoAction = {
 
 type RemoveTodoAction = {
   type: "removeTodo";
-  payload: number;
+  payload: {
+    id: number;
+    setNewTodos: (data: ApiTodoListType) => void;
+  };
 };
 
 type ToggleTodoAction = {
@@ -65,8 +68,18 @@ export default function todosReducer(
       ];
 
     case "removeTodo":
-      return state.filter((td) => {
-        return td.id !== action.payload;
+      fetch("http://eris:8080/tdl/api/private/" + action.payload.id, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+      })
+        .then((response) => response.json())
+        .then((data: ApiTodoListType) => {
+          console.log(data);
+          action.payload.setNewTodos(data);
+        });
+
+    return state.filter((td) => {
+        return td.id !== action.payload.id;
       });
 
     case "toggleTodo":
